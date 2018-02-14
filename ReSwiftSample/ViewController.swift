@@ -7,19 +7,42 @@
 //
 
 import UIKit
+import ReSwift
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, StoreSubscriber {
+  
+  typealias StoreSubscriberStateType = AppState
+  
+  @IBOutlet weak var counterLabel: UILabel!
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+    // 状態変化の監視開始
+    mainStore.subscribe(self)
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    // 状態変化の監視終了
+    mainStore.unsubscribe(self)
+  }
+  
+  @IBAction func increaseButtonTapped(_ sender: UIButton) {
+    mainStore.dispatch(
+      CounterActionIncrease()
+    )
+  }
+  @IBAction func decreaseButtonTapped(_ sender: UIButton) {
+    mainStore.dispatch(
+      CounterActionDecrease()
+    )
   }
 
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+  func newState(state: StoreSubscriberStateType) {
+    counterLabel.text = "\(state.counter)"
   }
-
-
 }
-
