@@ -7,18 +7,32 @@
 //
 
 import ReSwift
+import RealmSwift
 
 func counterReducer(action: Action, state: AppState?) -> AppState {
   var state = state ?? AppState()
+  let realm = try! Realm()
+  
+  let rstore = StoreState()
   
   switch action {
   case _ as CounterActionIncrease:
     state.counter += 1
+    rstore.counter = state.counter
+    try! realm.write() {
+      realm.add(rstore, update: true)
+    }
+    
   case _ as CounterActionDecrease:
     state.counter -= 1
+    rstore.counter = state.counter
+    try! realm.write() {
+      realm.add(rstore, update: true)
+    }
+    
   default:
     break
   }
-  
   return state
+  
 }

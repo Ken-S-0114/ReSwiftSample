@@ -8,6 +8,7 @@
 
 import UIKit
 import ReSwift
+import RealmSwift
 
 class ViewController: UIViewController, StoreSubscriber {
   
@@ -17,6 +18,9 @@ class ViewController: UIViewController, StoreSubscriber {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    let realm = try! Realm()
+    let rstore = realm.objects(StoreState.self).first ?? StoreState()
+    mainStore.state.counter = rstore.counter
     // 状態変化の監視開始
     mainStore.subscribe(self)
   }

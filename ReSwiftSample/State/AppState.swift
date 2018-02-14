@@ -7,7 +7,17 @@
 //
 
 import ReSwift
+import RealmSwift
 
 struct AppState: StateType {
   var counter: Int = 0
+}
+
+class StoreState: Object {
+  @objc dynamic var id = 0
+  @objc dynamic var counter = 0
+  
+  override static func primaryKey() -> String? {
+    return "id"
+  } 
 }
